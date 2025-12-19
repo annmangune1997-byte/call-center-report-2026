@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Call Center & Orders Dashboard</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+  h1 { text-align: center; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+  th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+  th { background-color: #007BFF; color: white; }
+  .green { background-color: #c6f6c6; }
+  .yellow { background-color: #fff3c6; }
+  .red { background-color: #f6c6c6; }
+  .dashboard { display: flex; justify-content: space-around; margin-bottom: 20px; }
+  .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 18%; text-align: center; }
+  .card h2 { margin: 10px 0; color: #007BFF; }
+</style>
+</head>
+<body>
+
+<h1>Call Center & Orders Dashboard</h1>
+
+<div class="dashboard">
+  <div class="card">
+    <h3>Total Orders</h3>
+    <h2 id="totalOrders">0</h2>
+  </div>
+  <div class="card">
+    <h3>Successful Orders</h3>
+    <h2 id="successfulOrders">0</h2>
+  </div>
+  <div class="card">
+    <h3>Cancelled Orders</h3>
+    <h2 id="cancelledOrders">0</h2>
+  </div>
+  <div class="card">
+    <h3>Success Rate</h3>
+    <h2 id="successRate">0%</h2>
+  </div>
+</div>
+
+<table id="ordersTable">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Branch</th>
+      <th>Orders Received</th>
+      <th>Successful Orders</th>
+      <th>Cancelled Orders</th>
+      <th>Customer Calls</th>
+      <th>Complaints</th>
+      <th>Success Rate %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Example rows -->
+    <tr>
+      <td>2025-12-19</td>
+      <td>Hamdan St</td>
+      <td>50</td>
+      <td>45</td>
+      <td>5</td>
+      <td>20</td>
+      <td>2</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>2025-12-19</td>
+      <td>Al Khalidiyah</td>
+      <td>40</td>
+      <td>35</td>
+      <td>5</td>
+      <td>15</td>
+      <td>1</td>
+      <td></td>
+    </tr>
+    <!-- Add more rows as needed -->
+  </tbody>
+</table>
+
+<script>
+  const table = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
+  let totalOrders = 0, successfulOrders = 0, cancelledOrders = 0;
+
+  for (let row of table.rows) {
+    const ordersReceived = parseInt(row.cells[2].innerText);
+    const successful = parseInt(row.cells[3].innerText);
+    const cancelled = parseInt(row.cells[4].innerText);
+
+    // Update totals
+    totalOrders += ordersReceived;
+    successfulOrders += successful;
+    cancelledOrders += cancelled;
+
+    // Calculate success rate
+    const rate = ordersReceived > 0 ? Math.round((successful / ordersReceived) * 100) : 0;
+    row.cells[7].innerText = rate + '%';
+
+    // Apply color coding
+    if (rate >= 90) row.cells[7].className = 'green';
+    else if (rate >= 80) row.cells[7].className = 'yellow';
+    else row.cells[7].className = 'red';
+  }
+
+  // Update dashboard cards
+  document.getElementById('totalOrders').innerText = totalOrders;
+  document.getElementById('successfulOrders').innerText = successfulOrders;
+  document.getElementById('cancelledOrders').innerText = cancelledOrders;
+  const overallRate = totalOrders > 0 ? Math.round((successfulOrders / totalOrders) * 100) : 0;
+  const rateElem = document.getElementById('successRate');
+  rateElem.innerText = overallRate + '%';
+  rateElem.className = overallRate >= 90 ? 'green' : (overallRate >= 80 ? 'yellow' : 'red');
+</script>
+
+</body>
+</html>
